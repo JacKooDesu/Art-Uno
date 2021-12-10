@@ -10,13 +10,17 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
     public GameObject backSideImage;
 
     int cardNum;
+    public int CardNum { get => cardNum; }
     CardColor cardColor;
+    public CardColor CardColor { get => cardColor; }
 
     bool faceUp = false;
 
     public Player owner;
 
     bool isDragging;
+
+    public bool isAvailable = false;
 
     void Start()
     {
@@ -42,12 +46,17 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
                 RectTransform rt = GameHandler.Singleton.cardPlacingRect as RectTransform;
                 RectTransform self = transform as RectTransform;
                 if (Utils.CheckRecttransformOverlaps(self, rt))
-                {
-                    print("hover");
-                    // GameHandler.Singleton.DropCard(this);
-                }
+                    UseCard();
             }
         }
+    }
+
+    public void UseCard()
+    {
+        SwitchSide(true);
+        
+        GameHandler.Singleton.DropCard(this);
+        owner.RemoveCard(this);
     }
 
     public void Init(CardColor color, int num)
@@ -105,9 +114,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
     public void OnBeginDrag(PointerEventData eventData)
     {
         // throw new System.NotImplementedException();
-        if (owner != null && owner.isLocalPlayer && GameHandler.Singleton.currentRoundHost == owner)
+        if (owner != null && owner.isLocalPlayer && GameHandler.Singleton.CurrentRoundHost == owner && isAvailable)
         {
-            GetComponent<Image>().raycastTarget = false;
             GameHandler.Singleton.ShowCardPlacingRect(true);
             isDragging = true;
         }

@@ -35,11 +35,17 @@ public class GameHandler : MonoBehaviour
     public Transform logParent;
 
     public Transform cardPlacingRect;   // 拖曳至此位置將牌打出
+    public Transform tableCardParent;
 
-    public UnityEngine.UI.Button testButton;
+    public UnityEngine.UI.Button drawButton;
+    public UnityEngine.UI.Button nextRoundButton;
 
     public List<Player> players = new List<Player>();
-    [HideInInspector] public Player currentRoundHost;
+    [HideInInspector] public int currentRoundHostIndex;
+    public Player CurrentRoundHost
+    {
+        get => players[currentRoundHostIndex];
+    }
 
     [HideInInspector] public bool isLogging;
 
@@ -104,7 +110,8 @@ public class GameHandler : MonoBehaviour
         deck.RemoveAt(0);
 
         c.transform.SetParent(FindObjectOfType<Canvas>().transform);
-        c.transform.DOMove(p.cardParent.position, .5f).OnComplete(() => p.AddCard(c));
+        c.transform.DOMove(p.cardParent.position, .5f);
+        p.AddCard(c);
     }
 
     public void Draw(Player p, int count)
@@ -118,6 +125,14 @@ public class GameHandler : MonoBehaviour
     public void DropCard(Card c)
     {
         c.transform.DOMove(Utils.GetRandomPointInRect(cardPlacingRect as RectTransform), .5f);
+        c.transform.DOScale(Vector3.one * .8f, .5f);
+        c.transform.DORotate(Vector3.forward * Random.Range(0, 360f), .5f);
+
+        c.transform.SetParent(tableCardParent);
+        // c.GetComponent<>
+
+        cardOnTable.Add(c);
+        // (c.transform as RectTransform).DOMove(Vector2.zero, .5f);
     }
 
     void Start()
@@ -132,7 +147,8 @@ public class GameHandler : MonoBehaviour
 
         Player local = players.Find((p) => (p.isLocalPlayer));
 
-        testButton.onClick.AddListener(() => Draw(local));
+        drawButton.onClick.AddListener(() => Draw(local));
+        // nextRoundButton.onClick.AddListener(() => NextRound());
         // testButton.onClick.AddListener(() => Log("你的回合！"));
 
         foreach (Player p in players)
@@ -146,11 +162,11 @@ public class GameHandler : MonoBehaviour
 
     public void ChangePlayer(int index)
     {
-        currentRoundHost = players[index];
+        currentRoundHostIndex = index;
 
-        Log($"{currentRoundHost.playerName} 的回合！");
+        Log($"{CurrentRoundHost.playerName} 的回合！");
 
-        currentRoundHost.OnRoundBegin();
+        CurrentRoundHost.OnRoundBegin();
     }
 
     public void Log(string message)
@@ -205,6 +221,21 @@ public class GameHandler : MonoBehaviour
 
             cardPlacingRect.gameObject.SetActive(b);
         }
+    }
+
+    public void NextRound()
+    {
+        int target = 0;
+        if (currentRoundHostIndex + 1 < players.Count)
+        {
+            target = currentRoundHostIndex + 1;
+        }
+        else
+        {
+            target = 0;
+        }
+
+        ChangePlayer(target);
     }
 
     void Update()

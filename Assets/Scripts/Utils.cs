@@ -21,8 +21,8 @@ public static class Utils
     {
         Rect r = rect.rect;
         Vector2 v2 = new Vector2(
-            Random.Range(0 + offsetX, r.width - offsetX),
-            Random.Range(0 + offsetY, r.height - offsetY));
+            Random.Range(-r.width / 2 + offsetX, r.width / 2 - offsetX),
+            Random.Range(-r.height / 2 + +offsetY, r.height / 2 - offsetY));
 
         v2 += (Vector2)rect.position;
 
@@ -34,6 +34,6 @@ public static class Utils
 
     static void CanvasScaleConvert()
     {
-        
+
     }
 }
