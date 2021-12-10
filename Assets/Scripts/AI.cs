@@ -101,7 +101,6 @@ public class AI : Player
             action.Invoke();
 
             if (handCard.Count == 0)
-
                 break;
         }
     }

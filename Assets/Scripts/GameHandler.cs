@@ -164,7 +164,7 @@ public class GameHandler : MonoBehaviour
     {
         currentRoundHostIndex = index;
 
-        Log($"{CurrentRoundHost.playerName} 的回合！");
+        Log($"{CurrentRoundHost.playerName} 的回合");
 
         CurrentRoundHost.OnRoundBegin();
     }
