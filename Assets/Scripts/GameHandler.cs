@@ -11,7 +11,14 @@ public class GameHandler : MonoBehaviour
 
     public Transform deckParent;
 
+    public Transform logParent;
+
     public UnityEngine.UI.Button testButton;
+
+    public List<Player> players = new List<Player>();
+    Player currentRoundHost;
+
+    [HideInInspector] public bool isLogging;
 
     public void InitDeck()
     {
@@ -23,8 +30,8 @@ public class GameHandler : MonoBehaviour
             {
                 for (int j = 0; j < sm.cardRange; ++j)
                 {
-                    Card c = Instantiate(sm.cardPrefab).GetComponent<Card>();
-                    c.transform.SetParent(deckParent);
+                    Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
+                    // c.transform.SetParent(deckParent);
                     (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(i * j)) * sm.deckCardOffset);
 
                     c.Init((CardColor)x, j);
@@ -77,11 +84,79 @@ public class GameHandler : MonoBehaviour
         c.transform.DOMove(p.cardParent.position, .5f).OnComplete(() => p.AddCard(c));
     }
 
+    public void Draw(Player p, int count)
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            Draw(p);
+        }
+    }
+
     void Start()
     {
+        SettingManager sm = SettingManager.Singleton;
+
         InitDeck();
 
-        testButton.onClick.AddListener(() => Draw(FindObjectOfType<Player>()));
+        players = new List<Player>();
+        players.AddRange(FindObjectsOfType<Player>());
+        print(players.Count);
+
+        Player local = players.Find((p) => (p.isLocalPlayer));
+
+        testButton.onClick.AddListener(() => Draw(local));
+        // testButton.onClick.AddListener(() => Log("你的回合！"));
+
+        foreach (Player p in players)
+        {
+            Draw(p, sm.startCardCount);
+        }
+
+        // 決定起始玩家
+        ChangePlayer(Random.Range(0, players.Count));
+    }
+
+    public void ChangePlayer(int index)
+    {
+        currentRoundHost = players[index];
+
+        Log($"{currentRoundHost.playerName} 的回合！");
+    }
+
+    public void Log(string message)
+    {
+        isLogging = true;
+
+        UnityEngine.UI.Text logText = logParent.GetComponentInChildren<UnityEngine.UI.Text>();
+        Animator ani = logParent.GetComponent<Animator>();
+        CanvasGroup canvasGroup = logParent.GetComponent<CanvasGroup>();
+
+        canvasGroup.alpha = 0f;
+        logText.text = message;
+
+        logParent.gameObject.SetActive(true);
+        // DOTween.To [ getter, setter, targetValue, duration ]
+        DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1f, .6f).
+            OnComplete(
+                () =>
+                {
+                    ani.SetTrigger("Start");
+                    StartCoroutine(CheckAnimationComplete());
+                });
+
+        IEnumerator CheckAnimationComplete()
+        {
+            // 暫用數值定義，看要怎麼判定Animation clip length
+            yield return new WaitForSeconds(1.5f);
+
+            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 0f, .6f).
+            OnComplete(
+                () =>
+                {
+                    logParent.gameObject.SetActive(false);
+                    isLogging = false;
+                });
+        }
     }
 
     // Update is called once per frame

@@ -34,9 +34,12 @@ public class SettingManager : MonoBehaviour
 
     public float deckCardOffset;
 
-    [Header("玩家手牌設定")]
+    [Header("玩家手牌UI設定")]
     public float maxCardInvervalLength;
     public float minCardInvervalLength;
+
+    [Header("遊戲設定")]
+    public int startCardCount;
 
     void Start()
     {

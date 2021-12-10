@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public string playerName;
     public Transform cardParent;
     public List<Card> handCard = new List<Card>();
 
@@ -11,15 +12,15 @@ public class Player : MonoBehaviour
 
     public int currentHoveringCard;
 
-    void Start()
+    protected void Start()
     {
         currentHoveringCard = 0;
     }
 
-    void Update()
+    protected void Update()
     {
-        if (isLocalPlayer)
-            CalculateCardPosition();
+        // if (isLocalPlayer)
+        CalculateCardPosition();
     }
 
     public void CalculateCardPosition()
@@ -36,12 +37,12 @@ public class Player : MonoBehaviour
             if (i <= currentHoveringCard)
             {
                 (handCard[i].transform as RectTransform).localPosition =
-                    Vector3.Lerp(origin, Vector3.right * ((float)i - mid) * interval, .8f);
+                    Vector3.Lerp(origin, Vector3.right * ((float)i - mid) * interval, .2f);
             }
             else
             {
                 (handCard[i].transform as RectTransform).localPosition =
-                    Vector3.Lerp(origin, Vector3.right * (((float)i - mid - 1) * interval + 140f), .8f);    // 140 是暫定的卡片寬度
+                    Vector3.Lerp(origin, Vector3.right * (((float)i - mid - 1) * interval + 140f), .2f);    // 140 是暫定的卡片寬度
             }
         }
     }
@@ -51,7 +52,9 @@ public class Player : MonoBehaviour
         c.owner = this;
 
         handCard.Add(c);
-        c.SwitchSide(true);
+        if (isLocalPlayer)
+            c.SwitchSide(true);
+
         c.transform.SetParent(cardParent);
 
         currentHoveringCard = handCard.Count - 1;

@@ -170,6 +170,7 @@ MonoBehaviour:
   inner: {fileID: 4772171929285669450}
   numText: {fileID: 4772171927767820889}
   backSideImage: {fileID: 7689256238477101269}
+  owner: {fileID: 0}
 --- !u!1 &4772171929285669449
 GameObject:
   m_ObjectHideFlags: 0
