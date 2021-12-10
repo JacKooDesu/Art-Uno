@@ -5,6 +5,27 @@ using DG.Tweening;
 
 public class GameHandler : MonoBehaviour
 {
+    static GameHandler singleton = null;
+
+    public static GameHandler Singleton
+    {
+        get
+        {
+            if (singleton != null)
+                return singleton;
+
+            singleton = FindObjectOfType(typeof(GameHandler)) as GameHandler;
+
+            if (singleton == null)
+            {
+                GameObject g = new GameObject("GameHandler");
+                singleton = g.AddComponent<GameHandler>();
+            }
+
+            return singleton;
+        }
+    }
+
     public List<Card> deck = new List<Card>();
     public List<Card> cardOnTable = new List<Card>();
     public List<Card> cardInGame = new List<Card>();
@@ -13,10 +34,12 @@ public class GameHandler : MonoBehaviour
 
     public Transform logParent;
 
+    public Transform cardPlacingRect;   // 拖曳至此位置將牌打出
+
     public UnityEngine.UI.Button testButton;
 
     public List<Player> players = new List<Player>();
-    Player currentRoundHost;
+    [HideInInspector] public Player currentRoundHost;
 
     [HideInInspector] public bool isLogging;
 
@@ -92,6 +115,11 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    public void DropCard(Card c)
+    {
+        c.transform.DOMove(Utils.GetRandomPointInRect(cardPlacingRect as RectTransform), .5f);
+    }
+
     void Start()
     {
         SettingManager sm = SettingManager.Singleton;
@@ -121,6 +149,8 @@ public class GameHandler : MonoBehaviour
         currentRoundHost = players[index];
 
         Log($"{currentRoundHost.playerName} 的回合！");
+
+        currentRoundHost.OnRoundBegin();
     }
 
     public void Log(string message)
@@ -159,7 +189,24 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    public void ShowCardPlacingRect(bool b)
+    {
+        CanvasGroup canvasGroup = cardPlacingRect.GetComponent<CanvasGroup>();
+
+        if (!b)
+        {
+            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 0f, .4f).
+                 OnComplete(() => cardPlacingRect.gameObject.SetActive(b));
+        }
+        else
+        {
+            canvasGroup.alpha = Mathf.Max(0, canvasGroup.alpha);
+            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1f, .4f);
+
+            cardPlacingRect.gameObject.SetActive(b);
+        }
+    }
+
     void Update()
     {
 

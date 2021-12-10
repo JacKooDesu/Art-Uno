@@ -19,11 +19,11 @@ public class Player : MonoBehaviour
 
     protected void Update()
     {
-        // if (isLocalPlayer)
-        CalculateCardPosition();
+        if (isLocalPlayer)
+            CalculateCardPosition();
     }
 
-    public void CalculateCardPosition()
+    public virtual void CalculateCardPosition()
     {
         SettingManager sm = SettingManager.Singleton;
 
@@ -34,7 +34,12 @@ public class Player : MonoBehaviour
         for (int i = 0; i < handCard.Count; ++i)
         {
             Vector3 origin = (handCard[i].transform as RectTransform).localPosition;
-            if (i <= currentHoveringCard)
+            if (i == currentHoveringCard)
+            {
+                (handCard[i].transform as RectTransform).localPosition =
+                    Vector3.Lerp(origin, (Vector3.right * ((float)i - mid) * interval) + (Vector3.up * 20f), .2f);
+            }
+            else if (i < currentHoveringCard)
             {
                 (handCard[i].transform as RectTransform).localPosition =
                     Vector3.Lerp(origin, Vector3.right * ((float)i - mid) * interval, .2f);
@@ -58,6 +63,8 @@ public class Player : MonoBehaviour
         c.transform.SetParent(cardParent);
 
         currentHoveringCard = handCard.Count - 1;
+
+        CalculateCardPosition();
     }
 
     public virtual void OnRoundBegin()

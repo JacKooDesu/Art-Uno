@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler
+public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDragHandler
 {
     public Image inner;
     public Text numText;
@@ -15,15 +16,38 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler
 
     public Player owner;
 
+    bool isDragging;
+
     void Start()
     {
-
+        isDragging = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        CheckInteract();
+    }
 
+    void CheckInteract()
+    {
+        if (isDragging)
+        {
+            transform.position = Input.mousePosition;
+            if (Input.GetMouseButtonUp(0))
+            {
+                isDragging = false;
+                GameHandler.Singleton.ShowCardPlacingRect(false);
+
+                RectTransform rt = GameHandler.Singleton.cardPlacingRect as RectTransform;
+                RectTransform self = transform as RectTransform;
+                if (Utils.CheckRecttransformOverlaps(self, rt))
+                {
+                    print("hover");
+                    // GameHandler.Singleton.DropCard(this);
+                }
+            }
+        }
     }
 
     public void Init(CardColor color, int num)
@@ -69,15 +93,24 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (owner!=null && owner.isLocalPlayer)
+        if (owner != null && owner.isLocalPlayer)
         {
             owner.currentHoveringCard = owner.handCard.IndexOf(this);
         }
     }
 
-    public void OnDrag(PointerEventData eventData)
+    // no longer use because not stable
+    public void OnDrag(PointerEventData eventData) { }
+
+    public void OnBeginDrag(PointerEventData eventData)
     {
         // throw new System.NotImplementedException();
+        if (owner != null && owner.isLocalPlayer && GameHandler.Singleton.currentRoundHost == owner)
+        {
+            GetComponent<Image>().raycastTarget = false;
+            GameHandler.Singleton.ShowCardPlacingRect(true);
+            isDragging = true;
+        }
     }
 }
 
