@@ -54,7 +54,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
     public void UseCard()
     {
         SwitchSide(true);
-        
+
         GameHandler.Singleton.DropCard(this);
         owner.RemoveCard(this);
     }
@@ -124,5 +124,5 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
 
 public enum CardColor
 {
-    Red, Blue, Green, Yellow
+    Red, Blue, Green, Yellow, Black
 }
