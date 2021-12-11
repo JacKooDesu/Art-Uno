@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
         if (handCard.Count == 0)
         {
             // 贏了
-            GameHandler.Singleton.Log($"{playerName} 贏了");
+            GameHandler.Singleton.Log($"{playerName} 贏了", () => UnityEngine.SceneManagement.SceneManager.LoadScene(0));
         }
     }
 

@@ -39,7 +39,10 @@ public class AI : Player
 
         if (handCard.Find((c) => c.isAvailable) == null)
         {
-            OnRoundEnd();
+            actions.Add(() => { }); // 避免過快結束，後續須修正
+            actions.Add(() => OnRoundEnd());
+
+            StartCoroutine(AiAction());
             return;
         }
         else

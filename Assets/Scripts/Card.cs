@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDragHandler
 {
+    public Image outer;
     public Image inner;
     public Text numText;
     public GameObject backSideImage;
@@ -31,6 +32,22 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
     void Update()
     {
         CheckInteract();
+
+        if (owner != null)
+        {
+            if (owner.isLocalPlayer && isAvailable)
+            {
+                outer.enabled = true;
+            }
+            else
+            {
+                outer.enabled = false;
+            }
+        }
+        else
+        {
+            outer.enabled = false;
+        }
     }
 
     void CheckInteract()
@@ -57,6 +74,9 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
 
         GameHandler.Singleton.DropCard(this);
         owner.RemoveCard(this);
+
+        owner = null;
+        isAvailable = false;
     }
 
     public void Init(CardColor color, int num)

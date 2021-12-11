@@ -124,7 +124,7 @@ public class GameHandler : MonoBehaviour
 
     public void DropCard(Card c)
     {
-        c.transform.DOMove(Utils.GetRandomPointInRect(cardPlacingRect as RectTransform), .5f);
+        c.transform.DOMove(Utils.GetRandomPointInRect(cardPlacingRect as RectTransform, 100f, 60f), .5f);
         c.transform.DOScale(Vector3.one * .8f, .5f);
         c.transform.DORotate(Vector3.forward * Random.Range(0, 360f), .5f);
 
@@ -169,7 +169,7 @@ public class GameHandler : MonoBehaviour
         CurrentRoundHost.OnRoundBegin();
     }
 
-    public void Log(string message)
+    public void Log(string message, System.Action onComplete = null)
     {
         isLogging = true;
 
@@ -201,6 +201,9 @@ public class GameHandler : MonoBehaviour
                 {
                     logParent.gameObject.SetActive(false);
                     isLogging = false;
+
+                    if (onComplete != null)
+                        onComplete.Invoke();
                 });
         }
     }

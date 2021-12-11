@@ -156,7 +156,7 @@ MonoBehaviour:
   isLocalPlayer: 0
   hasAction: 0
   currentHoveringCard: 0
-  aiThinkTime: 3
+  aiThinkTime: 1.5
 --- !u!4 &79858716
 Transform:
   m_ObjectHideFlags: 0
@@ -608,7 +608,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: v 0.1.1
+  m_Text: v 0.1.2
 --- !u!222 &433748774
 CanvasRenderer:
   m_ObjectHideFlags: 0
