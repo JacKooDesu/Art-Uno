@@ -166,6 +166,10 @@ public class Player : MonoBehaviour
 
     public virtual void OnRoundEnd()
     {
+        foreach (Card c in handCard)
+        {
+            c.isAvailable = false;
+        }
         // if(丟了很多張卡，要選顏色)
         GameHandler.Singleton.NextRound();
     }

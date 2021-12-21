@@ -221,13 +221,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
+  m_Color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 1aed9040f25488e47b979354a98889f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -645,7 +645,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 668927070}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -745,8 +745,8 @@ RectTransform:
   - {fileID: 174546243}
   - {fileID: 1588733922}
   - {fileID: 1363251237}
-  - {fileID: 1861370176}
   - {fileID: 568268724}
+  - {fileID: 1861370176}
   - {fileID: 2073417440}
   - {fileID: 896670990}
   - {fileID: 1807318333}
@@ -1746,7 +1746,7 @@ PrefabInstance:
     - target: {fileID: 4772171929240680161, guid: 90008293a985332439e28701d0c89df7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4772171929240680161, guid: 90008293a985332439e28701d0c89df7,
         type: 3}
