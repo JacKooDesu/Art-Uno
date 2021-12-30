@@ -26,6 +26,8 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    Card[] specialCards;
+
     public List<Card> deck = new List<Card>();
     public List<Card> cardOnTable = new List<Card>();
     public List<Card> cardInGame = new List<Card>();
@@ -36,6 +38,10 @@ public class GameHandler : MonoBehaviour
 
     public Transform cardPlacingRect;   // 拖曳至此位置將牌打出
     public Transform tableCardParent;
+    [Header("UI設定")]
+    public GameObject descriptionPanel;
+    public UnityEngine.UI.Image image;
+    public UnityEngine.UI.Text imageDescription;
 
     public UnityEngine.UI.Button drawButton;
     public UnityEngine.UI.Button nextRoundButton;
@@ -49,9 +55,62 @@ public class GameHandler : MonoBehaviour
 
     [HideInInspector] public bool isLogging;
 
+    int[] specialCardIds = { -1 };
+    public Dictionary<int, int> cardIdList = new Dictionary<int, int>();
+
+    public void InitCardSetting()
+    {
+        SettingManager sm = SettingManager.Singleton;
+        List<int> cardTypeList = new List<int>();
+        var settings = sm.cardSettings;
+        cardTypeList.AddRange(specialCardIds);
+        for (int i = 0; i < sm.cardRange; ++i)
+        {
+            int temp = i;
+            cardTypeList.Add(temp);
+        }
+
+        while (cardTypeList.Count > sm.cardSettings.Count)
+            sm.cardSettings.RemoveAt(Random.Range(0, sm.cardSettings.Count));
+
+        for (int i = 0; i < cardTypeList.Count; ++i)
+        {
+            int temp = i;
+            cardIdList.Add(cardTypeList[i], temp);
+        }
+    }
+
+    public void InitSpecialCards()
+    {
+        SettingManager sm = SettingManager.Singleton;
+
+        // 加卡，ID = -1
+        // Card addCard = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
+
+        for (int x = 0; x < 4; ++x)
+        {
+            for (int i = 0; i < sm.cardCount; ++i)
+            {
+                Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
+                // c.transform.SetParent(deckParent);
+                (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(deck.Count)) * sm.deckCardOffset);
+                c.specialAction = () =>
+                {
+                    int p = players.IndexOf(c.owner);
+                    p = p + 1 >= players.Count ? 0 : p + 1;
+                    Draw(players[p], 2);
+                };
+
+                c.Init((CardColor)x, -1);
+                c.numText.text = "+2";
+
+                deck.Add(c);
+            }
+        }
+    }
+
     public void InitDeck()
     {
-        deck = new List<Card>();
         SettingManager sm = SettingManager.Singleton;
         for (int x = 0; x < 4; ++x)
         {
@@ -61,7 +120,8 @@ public class GameHandler : MonoBehaviour
                 {
                     Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
                     // c.transform.SetParent(deckParent);
-                    (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(i * j)) * sm.deckCardOffset);
+                    print(deck.Count);
+                    (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(deck.Count)) * sm.deckCardOffset);
 
                     c.Init((CardColor)x, j);
 
@@ -137,8 +197,12 @@ public class GameHandler : MonoBehaviour
 
     void Start()
     {
+        deck = new List<Card>();
         SettingManager sm = SettingManager.Singleton;
 
+        InitCardSetting();
+
+        InitSpecialCards();
         InitDeck();
 
         players = new List<Player>();
@@ -244,5 +308,20 @@ public class GameHandler : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void ShowCardDescription(Card c)
+    {
+        var setting = SettingManager.Singleton.cardSettings[cardIdList[c.CardNum]];
+        descriptionPanel.SetActive(true);
+
+        image.sprite = setting.image;
+        imageDescription.text = setting.author + '\n' + $"《{setting.imageName}》";
+
+    }
+
+    public void HideCardDescription()
+    {
+        descriptionPanel.SetActive(false);
     }
 }

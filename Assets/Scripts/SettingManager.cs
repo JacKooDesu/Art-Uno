@@ -41,6 +41,9 @@ public class SettingManager : MonoBehaviour
     [Header("遊戲設定")]
     public int startCardCount;
 
+    [Header("卡牌設定")]
+    public List<CardSetting> cardSettings = new List<CardSetting>();
+
     void Start()
     {
 

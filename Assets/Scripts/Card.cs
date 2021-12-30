@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDragHandler
+public class Card : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, IDragHandler, IBeginDragHandler
 {
     public Image outer;
     public Image inner;
     public Text numText;
+    public Image image;
     public GameObject backSideImage;
 
     int cardNum;
@@ -15,16 +16,23 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
     CardColor cardColor;
     public CardColor CardColor { get => cardColor; }
 
+    public System.Action specialAction;
+
     bool faceUp = false;
 
     public Player owner;
 
     bool isDragging;
+    static Card isHoveringCard;
+    public bool hasShow = false;
+    [SerializeField] float hoverTime = 3f;
+    static float hoveringCounter;
 
     public bool isAvailable = false;
 
     void Start()
     {
+        isHoveringCard = null;
         isDragging = false;
     }
 
@@ -32,6 +40,11 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
     void Update()
     {
         CheckInteract();
+
+        if (hoveringCounter >= hoverTime && isHoveringCard == this)
+        {
+            GameHandler.Singleton.ShowCardDescription(this);
+        }
 
         if (owner != null)
         {
@@ -52,8 +65,17 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
 
     void CheckInteract()
     {
+        if (owner == null || owner.isLocalPlayer)
+        {
+            if (isHoveringCard == this)
+            {
+                hoveringCounter += Time.deltaTime;
+            }
+        }
+
         if (isDragging)
         {
+            hoveringCounter = 0;
             transform.position = Input.mousePosition;
             if (Input.GetMouseButtonUp(0))
             {
@@ -73,6 +95,10 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
         SwitchSide(true);
 
         GameHandler.Singleton.DropCard(this);
+
+        if (specialAction != null)
+            specialAction.Invoke();
+
         owner.RemoveCard(this);
 
         owner = null;
@@ -106,6 +132,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
                 break;
         }
 
+        image.sprite = sm.cardSettings[GameHandler.Singleton.cardIdList[num]].image;
+
         numText.text = num.ToString();
 
         SwitchSide(false);
@@ -122,6 +150,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        isHoveringCard = this;
         if (owner != null && owner.isLocalPlayer)
         {
             owner.currentHoveringCard = owner.handCard.IndexOf(this);
@@ -133,11 +162,31 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IDragHandler, IBeginDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        isHoveringCard = null;
+        GameHandler.Singleton.HideCardDescription();
         // throw new System.NotImplementedException();
         if (owner != null && owner.isLocalPlayer && GameHandler.Singleton.CurrentRoundHost == owner && isAvailable)
         {
             GameHandler.Singleton.ShowCardPlacingRect(true);
             isDragging = true;
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        StartCoroutine(PointerTemper(eventData));
+        // if (eventData.pointer.tag != "Card")
+        //     isHovering = false;
+    }
+
+    IEnumerator<bool> PointerTemper(PointerEventData eventData)
+    {
+        yield return false;
+        if (eventData.pointerEnter == null || eventData.pointerEnter.tag != "Card")
+        {
+            isHoveringCard = null;
+            GameHandler.Singleton.HideCardDescription();
+            hoveringCounter = 0;
         }
     }
 }
