@@ -10,7 +10,7 @@ public static class Utils
 
     public static bool CheckRecttransformOverlaps(RectTransform r1, RectTransform r2)
     {
-        UnityEngine.Debug.Log(r1.position);
+        // UnityEngine.Debug.Log(r1.position);
         Rect rect1 = new Rect((Vector2)r1.position, r1.rect.size * CanvasScaler);
         Rect rect2 = new Rect((Vector2)r2.position, r2.rect.size * CanvasScaler);
 

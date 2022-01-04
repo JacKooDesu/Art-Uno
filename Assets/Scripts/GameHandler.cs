@@ -70,8 +70,8 @@ public class GameHandler : MonoBehaviour
             cardTypeList.Add(temp);
         }
 
-        while (cardTypeList.Count > sm.cardSettings.Count)
-            sm.cardSettings.RemoveAt(Random.Range(0, sm.cardSettings.Count));
+        // while (cardTypeList.Count > sm.cardSettings.Count)
+        //     sm.cardSettings.RemoveAt(Random.Range(0, sm.cardSettings.Count));
 
         for (int i = 0; i < cardTypeList.Count; ++i)
         {
@@ -120,7 +120,7 @@ public class GameHandler : MonoBehaviour
                 {
                     Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
                     // c.transform.SetParent(deckParent);
-                    print(deck.Count);
+                    // print(deck.Count);
                     (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(deck.Count)) * sm.deckCardOffset);
 
                     c.Init((CardColor)x, j);
@@ -136,11 +136,23 @@ public class GameHandler : MonoBehaviour
 
     public void ReturnToDeck()
     {
-        for (int i = 0; i < cardOnTable.Count; ++i)
+        SettingManager sm = SettingManager.Singleton;
+        for (int i = 0; i < cardOnTable.Count - 1; ++i)
         {
-            // Vector2 targetPosition = (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(i * j)) * sm.deckCardOffset);
-            // cardOnTable[i].transform.DOMove()
+            var c = cardOnTable[i];
+            c.transform.SetParent(deckParent);
+            (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(deck.Count)) * sm.deckCardOffset);
+            (c.transform as RectTransform).eulerAngles = Vector3.zero;
+            (c.transform as RectTransform).localScale = Vector3.one;
+
+            c.SwitchSide(false);
         }
+        var tempCard = cardOnTable[cardOnTable.Count - 1];
+        cardOnTable.RemoveAt(cardOnTable.Count - 1);
+        deck.AddRange(cardOnTable);
+        cardOnTable.Clear();
+        cardOnTable.Add(tempCard);
+        Shuffle();
     }
 
     void Shuffle()
@@ -159,11 +171,7 @@ public class GameHandler : MonoBehaviour
     public void Draw(Player p)
     {
         if (deck.Count == 0)
-        {
-            deck.AddRange(cardOnTable);
-            cardOnTable.Clear();
-            Shuffle();
-        }
+            ReturnToDeck();
 
         Card c = deck[0];
         cardInGame.Add(c);

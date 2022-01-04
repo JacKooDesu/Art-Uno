@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public List<Card> handCard = new List<Card>();
 
     public bool isLocalPlayer;
-    [SerializeField] bool hasAction;
+    [SerializeField] protected bool hasAction;
 
     public int currentHoveringCard;
 
@@ -149,6 +149,7 @@ public class Player : MonoBehaviour
                 if ((c.CardColor == topCard.CardColor && !hasAction) || c.CardNum == topCard.CardNum)
                 {
                     c.isAvailable = true;
+                    print($"{c.CardColor} - {c.CardNum} 可用");
                 }
                 else
                 {

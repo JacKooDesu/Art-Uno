@@ -25,6 +25,7 @@ public class AI : Player
 
     public override void OnRoundBegin()
     {
+        hasAction = false;
         actions = new List<System.Action>();
 
         GameHandler.Singleton.nextRoundButton.interactable = false;
@@ -57,7 +58,7 @@ public class AI : Player
 
                 int sameColor = handCard.FindAll((c) => c.CardColor == current.CardColor).Count - 1;
                 int sameNum = handCard.FindAll((c) => c.CardNum == current.CardNum).Count - 1;
-                point += (sameColor * 2) + (sameNum * 3);
+                point += (sameColor * 3) + (sameNum * 1);
 
                 // addition point
                 // foreach (Card c in handCard.FindAll((c) => c.CardNum == current.CardNum))
@@ -65,6 +66,8 @@ public class AI : Player
                 //     point += 1;
                 // }
                 availableCardPoints[i] = point;
+
+                print($"{current.CardColor} - {current.CardNum} : {point}分");
             }
 
             int cardIndex = 0;
