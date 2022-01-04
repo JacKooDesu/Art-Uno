@@ -853,7 +853,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: v 0.1.3
+  m_Text: v 0.1.4-a
 --- !u!222 &433748774
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1199,25 +1199,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 464726ec166db334e8e337d8bb37272c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 4772171929240680094, guid: e2b1e408fedc8264f9146053f4b0f8bb,
+  cardPrefab: {fileID: 4772171929240680094, guid: 9be74cee403ddd44fb17092fe5c3d660,
     type: 3}
   red: {r: 0.8679245, g: 0.2251691, b: 0.2251691, a: 1}
   blue: {r: 0.2235294, g: 0.6603318, b: 0.8666667, a: 1}
   yellow: {r: 0.9433962, g: 0.9409763, b: 0.45834818, a: 1}
   green: {r: 0.2235294, g: 0.8666667, b: 0.4809564, a: 1}
-  cardCount: 3
-  cardRange: 4
-  deckCardOffset: 2
+  cardCount: 4
+  cardRange: 9
+  deckCardOffset: 0.1
   maxCardInvervalLength: 80
   minCardInvervalLength: 10
   startCardCount: 5
   cardSettings:
-  - {fileID: 11400000, guid: 71552ed51d94ded48af138b9da81ec07, type: 2}
-  - {fileID: 11400000, guid: d1be402638d6cda4ea340bb10a37ab9b, type: 2}
-  - {fileID: 11400000, guid: 918e0cf39a3e55c4d87798d3a39ea456, type: 2}
-  - {fileID: 11400000, guid: 136d756338a400148a4a5b8d1196dbd6, type: 2}
-  - {fileID: 11400000, guid: a80d6039490d30446ba57912f045e78e, type: 2}
-  - {fileID: 11400000, guid: 8d39453869f15f748bde18f6a361194d, type: 2}
+  - {fileID: 11400000, guid: d22f8fae5c669a34b97ef87239c2dd47, type: 2}
+  - {fileID: 11400000, guid: 8e1c2633bef7f1240b358abf2b6c8ff0, type: 2}
+  - {fileID: 11400000, guid: 6132d904816cace4285e516b8060dd64, type: 2}
+  - {fileID: 11400000, guid: b88e43c507a5e9b4a809a754abd0418a, type: 2}
+  - {fileID: 11400000, guid: b031ec7dbce907e41b201c0db8464afa, type: 2}
+  - {fileID: 11400000, guid: fe53f95cd9a96834c85f1b869f265067, type: 2}
+  - {fileID: 11400000, guid: 6b7962720b3b1384b8a7b2b96d2b60c5, type: 2}
+  - {fileID: 11400000, guid: 815d3f28a877bce4ba7d1ed8733f5279, type: 2}
+  - {fileID: 11400000, guid: ce8e8cedbf08ad74dbab1c8ee1137f82, type: 2}
+  - {fileID: 11400000, guid: 9557ad3060e6d9d45a2c8ffd71917651, type: 2}
 --- !u!4 &692376397
 Transform:
   m_ObjectHideFlags: 0
@@ -1842,7 +1846,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: b9fc757717ffc754686ce37b686158ea, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -1854,7 +1858,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: "\u56DE\u5408\u7D50\u675F"
 --- !u!222 &1553724381
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2226,7 +2230,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: b9fc757717ffc754686ce37b686158ea, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -2238,7 +2242,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: "\u62BD\u5361"
 --- !u!222 &1968655870
 CanvasRenderer:
   m_ObjectHideFlags: 0

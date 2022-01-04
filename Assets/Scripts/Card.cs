@@ -113,26 +113,31 @@ public class Card : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, ID
         this.gameObject.name = $"{color.ToString()} - {num}";
 
         SettingManager sm = SettingManager.Singleton;
+        Sprite img = null;
         switch (cardColor)
         {
             case CardColor.Red:
                 inner.color = sm.red;
+                img = sm.cardSettings[GameHandler.Singleton.cardIdList[num]].red;
                 break;
 
             case CardColor.Blue:
                 inner.color = sm.blue;
+                img = sm.cardSettings[GameHandler.Singleton.cardIdList[num]].blue;
                 break;
 
             case CardColor.Yellow:
                 inner.color = sm.yellow;
+                img = sm.cardSettings[GameHandler.Singleton.cardIdList[num]].yellow;
                 break;
 
             case CardColor.Green:
                 inner.color = sm.green;
+                img = sm.cardSettings[GameHandler.Singleton.cardIdList[num]].green;
                 break;
         }
 
-        image.sprite = sm.cardSettings[GameHandler.Singleton.cardIdList[num]].image;
+        image.sprite = img;
 
         numText.text = num.ToString();
 

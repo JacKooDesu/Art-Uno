@@ -10,4 +10,5 @@ public class CardSetting : ScriptableObject
     [TextArea(3, 10)]
     public string description;
     public Sprite image;
+    public Sprite red, blue, green, yellow;
 }
