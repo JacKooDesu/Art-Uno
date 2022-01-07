@@ -88,6 +88,7 @@ public class GameHandler : MonoBehaviour
     public void InitSpecialCards()
     {
         SettingManager sm = SettingManager.Singleton;
+        specialActions = new List<System.Action<Card>>();
 
         // 加卡，ID = -1
         // Card addCard = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
