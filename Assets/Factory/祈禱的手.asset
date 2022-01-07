@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: "\u7948\u79B1\u7684\u624B"
   m_EditorClassIdentifier: 
   imageName: "\u7948\u79B1\u7684\u624B"
+  imageNameEng: Praying Hands
   author: "\u675C\u52D2"
   description: 
-  image: {fileID: 21300000, guid: 898d2723ffbeeac459259477e9263091, type: 3}
+  image: {fileID: 21300000, guid: 0cf27a2cdb086594ca20d93fe3ff418c, type: 3}
+  imageSliced: {fileID: 21300000, guid: 1370866c20559514d89066b4ee14bc18, type: 3}

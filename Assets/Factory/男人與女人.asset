@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: "\u7537\u4EBA\u8207\u5973\u4EBA"
   m_EditorClassIdentifier: 
   imageName: "\u7537\u4EBA\u8207\u5973\u4EBA"
+  imageNameEng: Homme et Femme
   author: "\u7C73\u7F85"
   description: 
-  image: {fileID: 21300000, guid: 2c46536570bf7fb4a8297851c5dde690, type: 3}
+  image: {fileID: 21300000, guid: bfa40f492a03aec4e92e5160ad2c0b01, type: 3}
+  imageSliced: {fileID: 21300000, guid: 43db896b9bf673646a91c8598e2be54e, type: 3}

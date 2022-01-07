@@ -34,4 +34,21 @@ public static class Utils
 
         return v2;
     }
+
+    public static void VerticalText(UnityEngine.UI.Text t)
+    {
+        string s = t.text;
+        string final = "";
+        int length = s.Length;
+        int iter = 0;
+        foreach (var c in s)
+        {
+            final += c;
+            if (iter != length - 1)
+                final += '\n';
+            iter++;
+        }
+
+        t.text = final;
+    }
 }

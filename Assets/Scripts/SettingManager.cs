@@ -27,7 +27,9 @@ public class SettingManager : MonoBehaviour
 
     public GameObject cardPrefab;
 
-    public Color red, blue, yellow, green;
+    public Color redTextColor, blueTextColor, yellowTextColor, greenTextColor;
+    public Sprite red, blue, yellow, green;
+    public Sprite[] redNum, blueNum, yellowNum, greenNum;
 
     public int cardCount;
     public int cardRange;

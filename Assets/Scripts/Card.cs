@@ -7,7 +7,10 @@ public class Card : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, ID
 {
     public Image outer;
     public Image inner;
-    public Text numText;
+    // public Text numText;
+    public Image numImage;  // 2022.1.7 added, no longer using text to display card num
+    public Text cnText;
+    public Text engText;
     public Image image;
     public GameObject backSideImage;
 
@@ -113,28 +116,45 @@ public class Card : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, ID
         this.gameObject.name = $"{color.ToString()} - {num}";
 
         SettingManager sm = SettingManager.Singleton;
+        Sprite numImage = null;
+        Color textColor = Color.white;
         switch (cardColor)
         {
             case CardColor.Red:
-                inner.color = sm.red;
+                textColor = sm.redTextColor;
+                inner.sprite = sm.red;
+                numImage = sm.redNum[num];
                 break;
 
             case CardColor.Blue:
-                inner.color = sm.blue;
+                textColor = sm.blueTextColor;
+                inner.sprite = sm.blue;
+                numImage = sm.blueNum[num];
                 break;
 
             case CardColor.Yellow:
-                inner.color = sm.yellow;
+                textColor = sm.yellowTextColor;
+                inner.sprite = sm.yellow;
+                numImage = sm.yellowNum[num];
                 break;
 
             case CardColor.Green:
-                inner.color = sm.green;
+                textColor = sm.greenTextColor;
+                inner.sprite = sm.green;
+                numImage = sm.greenNum[num];
                 break;
         }
 
-        image.sprite = sm.cardSettings[GameHandler.Singleton.cardIdList[num]].image;
+        var setting = sm.cardSettings[GameHandler.Singleton.cardIdList[num]];
+        image.sprite = setting.imageSliced;
 
-        numText.text = num.ToString();
+        this.numImage.sprite = numImage;
+
+        cnText.text = $"{setting.author} {setting.imageName}";
+        Utils.VerticalText(this.cnText);
+        engText.text = setting.imageNameEng;
+        cnText.color = textColor;
+        engText.color = textColor;
 
         SwitchSide(false);
         // gameObject.SetActive(false);

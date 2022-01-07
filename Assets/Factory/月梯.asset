@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cd237b5cbd37c4f9ff9d9dd85df577, type: 3}
+  m_Name: "\u6708\u68AF"
+  m_EditorClassIdentifier: 
+  imageName: "\u6708\u68AF"
+  imageNameEng: Ladder to the Moon
+  author: "\u55AC\u6CBB\u4E9E"
+  description: 
+  image: {fileID: 21300000, guid: 8a65b2e08bb21ec448b6147dbb0a3e50, type: 3}
+  imageSliced: {fileID: 21300000, guid: 795de9d4cdbd09340ba22ea181f444f7, type: 3}

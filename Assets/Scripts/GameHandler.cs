@@ -58,6 +58,9 @@ public class GameHandler : MonoBehaviour
     int[] specialCardIds = { -1 };
     public Dictionary<int, int> cardIdList = new Dictionary<int, int>();
 
+    public List<GameObject> displayingCard = new List<GameObject>();
+    public int cardDisplayMax = 30;
+
     public void InitCardSetting()
     {
         SettingManager sm = SettingManager.Singleton;
@@ -70,8 +73,8 @@ public class GameHandler : MonoBehaviour
             cardTypeList.Add(temp);
         }
 
-        // while (cardTypeList.Count > sm.cardSettings.Count)
-        //     sm.cardSettings.RemoveAt(Random.Range(0, sm.cardSettings.Count));
+        while (cardTypeList.Count < sm.cardSettings.Count)
+            sm.cardSettings.RemoveAt(Random.Range(0, sm.cardSettings.Count));
 
         for (int i = 0; i < cardTypeList.Count; ++i)
         {
@@ -93,7 +96,7 @@ public class GameHandler : MonoBehaviour
             {
                 Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
                 // c.transform.SetParent(deckParent);
-                (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(deck.Count)) * sm.deckCardOffset);
+                (c.transform as RectTransform).localPosition = new Vector2(0, 0);
                 c.specialAction = () =>
                 {
                     int p = players.IndexOf(c.owner);
@@ -101,10 +104,12 @@ public class GameHandler : MonoBehaviour
                     Draw(players[p], 2);
                 };
 
-                c.Init((CardColor)x, -1);
-                c.numText.text = "+2";
+                c.Init((CardColor)x, 0);
+                // c.numImage.sprite = "+2";
 
                 deck.Add(c);
+
+                c.gameObject.SetActive(false);
             }
         }
     }
@@ -114,18 +119,20 @@ public class GameHandler : MonoBehaviour
         SettingManager sm = SettingManager.Singleton;
         for (int x = 0; x < 4; ++x)
         {
-            for (int i = 0; i < sm.cardCount; ++i)
+            for (int i = 1; i <= sm.cardCount; ++i)
             {
                 for (int j = 0; j < sm.cardRange; ++j)
                 {
                     Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
                     // c.transform.SetParent(deckParent);
                     // print(deck.Count);
-                    (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(deck.Count)) * sm.deckCardOffset);
+                    (c.transform as RectTransform).localPosition = new Vector2(0, 0);
 
                     c.Init((CardColor)x, j);
 
                     deck.Add(c);
+
+                    c.gameObject.SetActive(false);
                 }
             }
         }
@@ -141,7 +148,7 @@ public class GameHandler : MonoBehaviour
         {
             var c = cardOnTable[i];
             c.transform.SetParent(deckParent);
-            (c.transform as RectTransform).localPosition = new Vector2(0, ((float)(deck.Count)) * sm.deckCardOffset);
+            (c.transform as RectTransform).localPosition = new Vector2(0, 0);
             (c.transform as RectTransform).eulerAngles = Vector3.zero;
             (c.transform as RectTransform).localScale = Vector3.one;
 
@@ -180,6 +187,8 @@ public class GameHandler : MonoBehaviour
         c.transform.SetParent(FindObjectOfType<Canvas>().transform);
         c.transform.DOMove(p.cardParent.position, .5f);
         p.AddCard(c);
+
+        DisplayCard(c);
     }
 
     public void Draw(Player p, int count)
@@ -331,5 +340,41 @@ public class GameHandler : MonoBehaviour
     public void HideCardDescription()
     {
         descriptionPanel.SetActive(false);
+    }
+
+    void DisplayCard(Card c)
+    {
+        c.gameObject.SetActive(true);
+
+        displayingCard.Add(c.gameObject);
+        if (displayingCard.Count > cardDisplayMax)
+        {
+            int iter = 0;
+            foreach (var g in displayingCard)
+            {
+                if (g.GetComponent<Card>().owner == null)
+                    break;
+                iter++;
+            }
+            if (iter >= displayingCard.Count)
+            {
+                cardDisplayMax += 1;
+                return;
+            }
+
+            displayingCard[iter].SetActive(false);
+            displayingCard.RemoveAt(iter);
+        }
+    }
+
+    public void ToggleFullScreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+    }
+
+    public GameObject informationPanel;
+    public void ToggleInformationPanel()
+    {
+        informationPanel.SetActive(!informationPanel.activeInHierarchy);
     }
 }
