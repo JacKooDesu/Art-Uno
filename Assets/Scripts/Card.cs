@@ -19,7 +19,7 @@ public class Card : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, ID
     CardColor cardColor;
     public CardColor CardColor { get => cardColor; }
 
-    public System.Action specialAction;
+    public int specialActionID;
 
     bool faceUp = false;
 
@@ -99,8 +99,8 @@ public class Card : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, ID
 
         GameHandler.Singleton.DropCard(this);
 
-        if (specialAction != null)
-            specialAction.Invoke();
+        if (specialActionID != -1)
+            GameHandler.Singleton.UseSpecialCard(specialActionID, this);
 
         owner.RemoveCard(this);
 

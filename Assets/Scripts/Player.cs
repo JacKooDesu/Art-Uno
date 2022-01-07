@@ -149,7 +149,7 @@ public class Player : MonoBehaviour
                 if ((c.CardColor == topCard.CardColor && !hasAction) || c.CardNum == topCard.CardNum)
                 {
                     c.isAvailable = true;
-                    print($"{c.CardColor} - {c.CardNum} 可用");
+                    // print($"{c.CardColor} - {c.CardNum} 可用");
                 }
                 else
                 {

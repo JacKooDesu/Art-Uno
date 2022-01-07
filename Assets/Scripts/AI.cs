@@ -67,7 +67,7 @@ public class AI : Player
                 // }
                 availableCardPoints[i] = point;
 
-                print($"{current.CardColor} - {current.CardNum} : {point}分");
+                // print($"{current.CardColor} - {current.CardNum} : {point}分");
             }
 
             int cardIndex = 0;

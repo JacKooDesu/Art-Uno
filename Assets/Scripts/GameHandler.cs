@@ -56,6 +56,8 @@ public class GameHandler : MonoBehaviour
     [HideInInspector] public bool isLogging;
 
     int[] specialCardIds = { -1 };
+    static List<System.Action<Card>> specialActions = new List<System.Action<Card>>();
+    public void UseSpecialCard(int i, Card c) { specialActions[i].Invoke(c); }
     public Dictionary<int, int> cardIdList = new Dictionary<int, int>();
 
     public List<GameObject> displayingCard = new List<GameObject>();
@@ -89,6 +91,13 @@ public class GameHandler : MonoBehaviour
 
         // 加卡，ID = -1
         // Card addCard = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
+        specialActions.Add((c) =>
+            {
+                print("Draw");
+                int p = players.IndexOf(c.owner);
+                p = p + 1 >= players.Count ? 0 : p + 1;
+                Draw(players[p], 2);
+            });
 
         for (int x = 0; x < 4; ++x)
         {
@@ -97,12 +106,7 @@ public class GameHandler : MonoBehaviour
                 Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
                 // c.transform.SetParent(deckParent);
                 (c.transform as RectTransform).localPosition = new Vector2(0, 0);
-                c.specialAction = () =>
-                {
-                    int p = players.IndexOf(c.owner);
-                    p = p + 1 >= players.Count ? 0 : p + 1;
-                    Draw(players[p], 2);
-                };
+                c.specialActionID = 0;
 
                 c.Init((CardColor)x, 0);
                 // c.numImage.sprite = "+2";
@@ -119,14 +123,15 @@ public class GameHandler : MonoBehaviour
         SettingManager sm = SettingManager.Singleton;
         for (int x = 0; x < 4; ++x)
         {
-            for (int i = 1; i <= sm.cardCount; ++i)
+            for (int i = 0; i < sm.cardCount; ++i)
             {
-                for (int j = 0; j < sm.cardRange; ++j)
+                for (int j = 1; j < sm.cardRange; ++j)
                 {
                     Card c = Instantiate(sm.cardPrefab, deckParent).GetComponent<Card>();
                     // c.transform.SetParent(deckParent);
                     // print(deck.Count);
                     (c.transform as RectTransform).localPosition = new Vector2(0, 0);
+                    c.specialActionID = -1;
 
                     c.Init((CardColor)x, j);
 
